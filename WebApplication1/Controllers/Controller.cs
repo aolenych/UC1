@@ -1,12 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection.Metadata;
-using System.Runtime.ConstrainedExecution;
-using System;
+
 using Newtonsoft.Json.Linq;
-using System.Data.SqlTypes;
-using System.Security.Cryptography;
+using UC1.Extensions;
 
 namespace WebApplication1.Controllers
 {
@@ -14,34 +9,40 @@ namespace WebApplication1.Controllers
     [Route("[controller]")]
     public class CountryController : ControllerBase
     {
-        private const string ApiUrl = "https://restcountries.com/v3.1/all";
+        private readonly IConfiguration _configuration;
 
+        public CountryController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         [HttpGet]
-        public async Task<IActionResult> GetCountries(string? param1, int? number, string? param3)
+        public async Task<IActionResult> GetCountries(string? filter, int? number, string? param3)
         {
 
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var response = await client.GetStringAsync(ApiUrl);
+                    var response = await client.GetStringAsync(_configuration["ApiUrl"]);
                     var countries = JArray.Parse(response);
 
                     // Trim down data
                     var trimmedCountries = countries.Select(c => new
+                    Country
                     {
-                        Name = c["name"]["common"]?.ToString(),
+                        Name = c["name"]?["common"]?.ToString(),
                         Capital = c["capital"]?.FirstOrDefault()?.ToString(),
                         Region = c["region"]?.ToString(),
                         SubRegion = c["subregion"]?.ToString(),
-                        Population = Convert.ToInt32(c["population"])  // Convert JToken to int
+                        Population = Convert.ToInt32(c["population"]) 
                     });
 
-                    return Ok(trimmedCountries);
+                    var filteredCountries = CountryHelper.SearchCountries(trimmedCountries, filter);
+
+                    return Ok(filteredCountries);
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception (you should ideally be using a logging framework/library)
                     Console.WriteLine(ex.Message);
                     return StatusCode(500, "An internal server error occurred.");
                 }
