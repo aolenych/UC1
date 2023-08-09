@@ -26,5 +26,18 @@ namespace UC1.Extensions
             long populationThreshold = (long)millions * 1_000_000;
             return countries.Where(c => c.Population < populationThreshold).ToList();
         }
+        public static IEnumerable<Country> SortCountries(IEnumerable<Country> countries, string? order)
+        {
+            if (order == "descend")
+            {
+                return countries.OrderByDescending(c => c.Name).ToList();
+            }
+            else if (order == "ascend")
+            {
+                return countries.OrderBy(c => c.Name).ToList();
+            }
+            else return countries;
+        }
+
     }
 }

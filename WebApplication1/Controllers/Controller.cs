@@ -15,8 +15,15 @@ namespace WebApplication1.Controllers
         {
             _configuration = configuration;
         }
+        /// <summary>
+        /// Retieves country filtered by name and maximum population, and order it by ascend or descend sortOrder
+        /// </summary>
+        /// <param name="filter">Insensitive search</param>
+        /// <param name="populationFilter">Maximum population in millions</param>
+        /// <param name="sortOrder">Sort order - ascend or descend</param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetCountries(string? filter, int? populationFilter, string? param3)
+        public async Task<IActionResult> GetCountries(string? filter, int? populationFilter, string? sortOrder)
         {
 
             using (HttpClient client = new HttpClient())
@@ -39,6 +46,7 @@ namespace WebApplication1.Controllers
 
                     var filteredCountries = CountryHelper.SearchCountries(trimmedCountries, filter);
                     filteredCountries = CountryHelper.FilterByPopulation(filteredCountries, populationFilter);
+                    filteredCountries = CountryHelper.SortCountries(filteredCountries, sortOrder);
                      
                     return Ok(filteredCountries);
                 }

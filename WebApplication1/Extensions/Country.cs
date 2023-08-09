@@ -4,7 +4,7 @@ namespace UC1.Extensions
 {
     public class Country
     {
-        [JsonPropertyName("name")]
+        [JsonPropertyName("commonName")]
         public string? Name { get; set; }
         [JsonPropertyName("capital")]
         public string? Capital { get; set; }
@@ -14,5 +14,6 @@ namespace UC1.Extensions
         public string? SubRegion { get; set; }
         [JsonPropertyName("population")]
         public long? Population { get; set; }
+
     }
 }
