@@ -26,7 +26,6 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCountries(string? filter, int? populationFilter, string? sortOrder)
         {
-
             using (HttpClient client = new HttpClient())
             {
                 try
@@ -35,23 +34,18 @@ namespace WebApplication1.Controllers
                     var countries = JArray.Parse(response);
 
                     // Trim down data
-                    var trimmedCountries = countries.Select(c => new
-                    Country
+                    var trimmedCountries = countries.Select(c => new Country
                     {
                         Name = c["name"]?["common"]?.ToString(),
                         Capital = c["capital"]?.FirstOrDefault()?.ToString(),
                         Region = c["region"]?.ToString(),
                         SubRegion = c["subregion"]?.ToString(),
-                        Population = Convert.ToInt64(c["population"]) 
+                        Population = Convert.ToInt64(c["population"])
                     });
 
-                    var filteredCountries = CountryHelper.SearchCountries(trimmedCountries, filter);
-                    filteredCountries = CountryHelper.FilterByPopulation(filteredCountries, populationFilter);
-                    filteredCountries = CountryHelper.SortCountries(filteredCountries, sortOrder);
-                    filteredCountries = CountryHelper.GetPagedCountries(filteredCountries, _limitOfCountriesPerRequest);
+                    var processedCountries = CountryHelper.ProcessCountries(trimmedCountries, filter, populationFilter, sortOrder, _limitOfCountriesPerRequest);
 
-
-                    return Ok(filteredCountries);
+                    return Ok(processedCountries);
                 }
                 catch (Exception ex)
                 {
@@ -60,6 +54,5 @@ namespace WebApplication1.Controllers
                 }
             }
         }
-
     }
 }
