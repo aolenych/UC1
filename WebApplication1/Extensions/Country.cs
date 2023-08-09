@@ -13,6 +13,6 @@ namespace UC1.Extensions
         [JsonPropertyName("subregion")]
         public string? SubRegion { get; set; }
         [JsonPropertyName("population")]
-        public int? Population { get; set; }
+        public long? Population { get; set; }
     }
 }

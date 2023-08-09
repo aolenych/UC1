@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
             _configuration = configuration;
         }
         [HttpGet]
-        public async Task<IActionResult> GetCountries(string? filter, int? number, string? param3)
+        public async Task<IActionResult> GetCountries(string? filter, int? populationFilter, string? param3)
         {
 
             using (HttpClient client = new HttpClient())
@@ -34,10 +34,11 @@ namespace WebApplication1.Controllers
                         Capital = c["capital"]?.FirstOrDefault()?.ToString(),
                         Region = c["region"]?.ToString(),
                         SubRegion = c["subregion"]?.ToString(),
-                        Population = Convert.ToInt32(c["population"]) 
+                        Population = Convert.ToInt64(c["population"]) 
                     });
 
                     var filteredCountries = CountryHelper.SearchCountries(trimmedCountries, filter);
+                    filteredCountries = CountryHelper.FilterByPopulation(filteredCountries, populationFilter);
                      
                     return Ok(filteredCountries);
                 }
