@@ -38,7 +38,7 @@ namespace WebApplication1.Controllers
                     });
 
                     var filteredCountries = CountryHelper.SearchCountries(trimmedCountries, filter);
-
+                     
                     return Ok(filteredCountries);
                 }
                 catch (Exception ex)
