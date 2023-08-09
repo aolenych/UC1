@@ -10,6 +10,7 @@ namespace WebApplication1.Controllers
     public class CountryController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private static int _limitOfCountriesPerRequest = 10;
 
         public CountryController(IConfiguration configuration)
         {
@@ -47,7 +48,9 @@ namespace WebApplication1.Controllers
                     var filteredCountries = CountryHelper.SearchCountries(trimmedCountries, filter);
                     filteredCountries = CountryHelper.FilterByPopulation(filteredCountries, populationFilter);
                     filteredCountries = CountryHelper.SortCountries(filteredCountries, sortOrder);
-                     
+                    filteredCountries = CountryHelper.GetPagedCountries(filteredCountries, _limitOfCountriesPerRequest);
+
+
                     return Ok(filteredCountries);
                 }
                 catch (Exception ex)

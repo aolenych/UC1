@@ -39,5 +39,10 @@ namespace UC1.Extensions
             else return countries;
         }
 
+        public static IEnumerable<Country> GetPagedCountries(IEnumerable<Country> countries, int numberOfCountries)
+        {
+            return countries.Take(numberOfCountries).ToList();
+        }
+
     }
 }
