@@ -4,9 +4,9 @@ namespace UC1.Extensions
 {
     public static class CountryHelper
     {
-        private static IEnumerable<Country>? _processedCountries;
         public static IEnumerable<Country> ProcessCountries(IEnumerable<Country> countries, string? filter, int? populationFilter, string? sortOrder, int limit)
         {
+            IEnumerable<Country> _processedCountries;
             _processedCountries = SearchCountries(countries, filter);
             _processedCountries = FilterByPopulation(_processedCountries, populationFilter);
             _processedCountries = SortCountries(_processedCountries, sortOrder);
