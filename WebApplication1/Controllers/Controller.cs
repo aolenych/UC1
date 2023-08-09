@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json.Linq;
 using UC1.Extensions;
 

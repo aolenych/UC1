@@ -1,4 +1,6 @@
-﻿namespace UC1.Extensions
+﻿using System.Runtime.CompilerServices;
+
+namespace UC1.Extensions
 {
     public static class CountryHelper
     {
@@ -13,7 +15,7 @@
             return _processedCountries;
         }
 
-        private static IEnumerable<Country> SearchCountries(IEnumerable<Country> countries, string? searchTerm)
+        internal static IEnumerable<Country> SearchCountries(IEnumerable<Country> countries, string? searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
@@ -27,7 +29,7 @@
                 .ToList();
         }
 
-        private static IEnumerable<Country> FilterByPopulation(IEnumerable<Country> countries, int? millions = null)
+        internal static IEnumerable<Country> FilterByPopulation(IEnumerable<Country> countries, int? millions = null)
         {
             if (millions == null)
                 return countries;
@@ -35,7 +37,8 @@
             long populationThreshold = (long)millions * 1_000_000;
             return countries.Where(c => c.Population < populationThreshold).ToList();
         }
-        private static IEnumerable<Country> SortCountries(IEnumerable<Country> countries, string? order)
+
+        internal static IEnumerable<Country> SortCountries(IEnumerable<Country> countries, string? order)
         {
             if (order == "descend")
             {
@@ -48,7 +51,7 @@
             else return countries;
         }
 
-        private static IEnumerable<Country> GetPagedCountries(IEnumerable<Country> countries, int numberOfCountries)
+        internal static IEnumerable<Country> GetPagedCountries(IEnumerable<Country> countries, int numberOfCountries)
         {
             return countries.Take(numberOfCountries).ToList();
         }
